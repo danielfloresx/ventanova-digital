@@ -1,0 +1,160 @@
+<!-- Fondo para cerrar el menú en móviles -->
+@if (open) {
+  <button
+    type="button"
+    aria-label="Cerrar menú lateral"
+    class="fixed inset-0 z-40 bg-black/50 lg:hidden"
+    (click)="closeMenu.emit()">
+  </button>
+}
+
+<!-- Menú lateral -->
+<aside
+  class="fixed inset-y-16 left-0 z-50 w-72 overflow-y-auto bg-[#0B1220] p-4 text-white shadow-xl transition-all duration-300 lg:static lg:inset-y-auto lg:z-auto lg:translate-x-0 lg:shadow-none"
+  [class.-translate-x-full]="!open"
+  [class.translate-x-0]="open"
+  [class.lg:w-20]="collapsed"
+  [class.lg:w-72]="!collapsed">
+
+  <!-- Botón para expandir o contraer 
+  <button
+    type="button"
+    class="mb-5 flex w-full items-center justify-center rounded-lg border border-slate-700 px-3 py-2 text-slate-300 transition hover:bg-[#172554] hover:text-[#06B6D4]"
+    [attr.aria-label]="collapsed ? 'Expandir menú' : 'Contraer menú'"
+    (click)="toggleWidth.emit()">
+    <span class="text-xl">{{ collapsed ? '☰' : '⇤' }}</span>
+    @if (!collapsed) {
+      <span class="ml-3 text-sm">Contraer menú</span>
+    }
+  </button>-->
+
+  @if (!collapsed) {
+    <p class="mb-4 px-3 text-xs font-semibold uppercase tracking-widest text-slate-400">
+      Menú principal
+    </p>
+  }
+
+  <!-- Acceso a Inicio -->
+  <a
+    routerLink="/inicio"
+    routerLinkActive="bg-[#172554] text-[#06B6D4]"
+    (click)="closeMenu.emit()"
+    class="mb-2 flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-[#172554]"
+    title="Inicio">
+    <span class="text-xl">⌂</span>
+    @if (!collapsed) {
+      <span>Inicio</span>
+    }
+  </a>
+
+  <!-- Categorías del catálogo -->
+  <button
+    type="button"
+    class="mb-2 flex w-full items-center justify-between rounded-lg px-3 py-3 text-left transition hover:bg-[#172554]"
+    title="Catálogo"
+    (click)="catalogoOpen = !catalogoOpen">
+    <span class="flex items-center gap-3">
+      <span class="text-xl">▦</span>
+      @if (!collapsed) {
+        <span>Catálogo</span>
+      }
+    </span>
+    @if (!collapsed) {
+      <span>{{ catalogoOpen ? '⌃' : '⌄' }}</span>
+    }
+  </button>
+
+  @if (catalogoOpen && !collapsed) {
+    <div class="mb-3 ml-3 border-l border-slate-700 pl-3">
+      <a routerLink="/catalogo" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Todos los productos
+      </a>
+      <a routerLink="/catalogo/notebooks" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Notebooks
+      </a>
+      <a routerLink="/catalogo/impresoras-y-scanners" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Impresoras y Scanners
+      </a>
+      <a routerLink="/catalogo/audio" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Audio
+      </a>
+      <a routerLink="/catalogo/videojuegos-y-consolas" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Videojuegos y Consolas
+      </a>
+      <a routerLink="/catalogo/fotografia-y-video" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Fotografía y Video
+      </a>
+      <a routerLink="/catalogo/perifericos-y-otros-accesorios" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Periféricos y otros accesorios
+      </a>
+      <a routerLink="/catalogo/componentes-de-computador" (click)="closeMenu.emit()"
+        class="block rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-[#172554] hover:text-[#06B6D4]">
+        Componentes de Computador
+      </a>
+    </div>
+  }
+
+  <!-- Tendencias -->
+  <a
+    routerLink="/tendencias"
+    routerLinkActive="bg-[#172554] text-[#06B6D4]"
+    (click)="closeMenu.emit()"
+    class="mb-2 flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-[#172554]"
+    title="Tendencias">
+    <span class="text-xl">↗</span>
+    @if (!collapsed) {
+      <span>Tendencias</span>
+    }
+  </a>
+
+  <!-- Contacto -->
+  <a
+    routerLink="/contacto"
+    routerLinkActive="bg-[#172554] text-[#06B6D4]"
+    (click)="closeMenu.emit()"
+    class="mb-2 flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-[#172554]"
+    title="Contacto">
+    <span class="text-xl">✉</span>
+    @if (!collapsed) {
+      <span>Contacto</span>
+    }
+  </a>
+
+  <!-- Acceso visual de usuario 
+       NOTA: No se realizará autenticación 
+  <div
+    class="mt-6 border-t border-slate-700 pt-5"
+    [class.text-center]="collapsed">
+    <button
+      type="button"
+      title="Usuario"
+      aria-label="Usuario"
+      class="flex w-full items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-[#172554]">
+      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#172554] text-lg text-[#06B6D4]">
+        ♙
+      </span>
+      @if (!collapsed) {
+        <span class="text-sm text-slate-300">Usuario</span>
+      }
+    </button>
+  </div>-->
+
+<!-- Acceso a la administración -->
+<a
+  routerLink="/administracion"
+  (click)="closeMenu.emit()"
+  routerLinkActive="bg-[#172554] text-[#06B6D4]"
+  class="mb-1 flex items-center gap-3 rounded-lg px-3 py-3 transition hover:bg-[#172554]">
+
+  <span class="text-lg">⚙</span>
+  <span>Administración</span>
+</a>
+
+</aside>

@@ -1,0 +1,207 @@
+
+<div class="mx-auto max-w-7xl space-y-6">
+
+  <header class="rounded-2xl bg-[#0B1220] p-7 text-white shadow-lg sm:p-9">
+    <p class="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+      VentaNova Digital
+    </p>
+    <h1 class="mt-3 text-3xl font-bold sm:text-4xl">
+      Administración de productos
+    </h1>
+    <p class="mt-3 text-slate-300">
+      Administra el catálogo conectado a tu base de datos
+    </p>
+    <button
+      type="button"
+      (click)="nuevoProducto()"
+      class="mt-6 rounded-lg bg-cyan-400 px-5 py-3 font-bold text-slate-950 hover:bg-cyan-300">
+      + Agregar producto
+    </button>
+  </header>
+
+  @if (mensaje()) {
+    <div class="rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-cyan-900">
+      {{ mensaje() }}
+    </div>
+  }
+
+  @if (error()) {
+    <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+      {{ error() }}
+    </div>
+  }
+
+  @if (mostrarFormulario()) {
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <h2 class="mb-5 text-2xl font-bold text-slate-900">
+        {{ idEdicion() === null ? 'Nuevo producto' : 'Editar producto' }}
+      </h2>
+
+      <form #productoForm="ngForm"
+        (ngSubmit)="guardarProducto()"
+        class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+        <div>
+          <label for="nombre" class="mb-2 block text-sm font-semibold">Nombre *</label>
+          <input id="nombre" name="nombre"
+            [(ngModel)]="formulario.nombre" required maxlength="150"
+            class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            placeholder="Nombre del producto">
+        </div>
+
+        <div>
+          <label for="precio" class="mb-2 block text-sm font-semibold">Precio (CLP) *</label>
+          <input id="precio" name="precio" type="number"
+            [(ngModel)]="formulario.precio" required min="0"
+            class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            placeholder="Ej. 599990">
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="descripcion" class="mb-2 block text-sm font-semibold">Descripción *</label>
+          <textarea id="descripcion" name="descripcion"
+            [(ngModel)]="formulario.descripcion" required maxlength="1000" rows="3"
+            class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            placeholder="Características del producto"></textarea>
+        </div>
+
+        <div>
+          <label for="categoria" class="mb-2 block text-sm font-semibold">Categoría *</label>
+          <select id="categoria" name="categoria"
+            [(ngModel)]="formulario.categoria" required
+            class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3">
+            @for (categoria of categorias; track categoria.valor) {
+              <option [value]="categoria.valor">{{ categoria.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="icono" class="mb-2 block text-sm font-semibold">Icono</label>
+          <input id="icono" name="icono"
+            [(ngModel)]="formulario.icono"
+            class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            placeholder="💻">
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="imagen" class="mb-2 block text-sm font-semibold">
+            URL de imagen (opcional)
+          </label>
+          <input id="imagen" name="imagen" type="url"
+            [(ngModel)]="formulario.imagen"
+            class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            placeholder="https://ejemplo.cl/imagen.jpg">
+        </div>
+
+        <label class="flex items-center gap-3 rounded-lg bg-slate-50 p-4 sm:col-span-2">
+          <input type="checkbox" name="destacado"
+            [(ngModel)]="formulario.destacado"
+            class="h-5 w-5 accent-cyan-600">
+          <span>
+            <span class="block font-semibold">Producto destacado</span>
+            <span class="text-sm text-slate-500">Mostrar en la sección de Inicio</span>
+          </span>
+        </label>
+
+        <div class="flex flex-wrap gap-3 sm:col-span-2">
+          <button type="submit"
+            [disabled]="productoForm.invalid || guardando()"
+            class="rounded-lg bg-[#0B1220] px-6 py-3 font-semibold text-white hover:bg-[#172554] disabled:opacity-50">
+            @if (guardando()) {
+              Guardando...
+            } @else {
+              {{ idEdicion() === null ? 'Guardar producto' : 'Guardar cambios' }}
+            }
+          </button>
+
+          <button type="button" (click)="cancelar()"
+            class="rounded-lg border border-slate-300 px-6 py-3 font-semibold hover:bg-slate-100">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 p-6">
+      <div>
+        <h2 class="text-xl font-bold text-slate-900">Productos registrados</h2>
+        <p class="mt-1 text-sm text-slate-500">
+          {{ productos().length }} productos en total
+        </p>
+      </div>
+      <button type="button" (click)="recargarProductos()"
+        [disabled]="cargando()"
+        class="rounded-lg border border-slate-300 px-4 py-2 font-semibold hover:bg-slate-50 disabled:opacity-50">
+        {{ cargando() ? 'Actualizando...' : 'Actualizar listado' }}
+      </button>
+    </div>
+
+    @if (cargando() && productos().length === 0) {
+      <p class="p-8 text-center text-slate-500">Cargando productos...</p>
+    } @else if (productos().length === 0) {
+      <p class="p-8 text-center text-slate-500">No hay productos registrados.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[850px] text-left text-sm">
+          <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+            <tr>
+              <th class="px-5 py-4">ID</th>
+              <th class="px-5 py-4">Producto</th>
+              <th class="px-5 py-4">Categoría</th>
+              <th class="px-5 py-4">Precio</th>
+              <th class="px-5 py-4">Estado</th>
+              <th class="px-5 py-4">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (producto of productos(); track producto.id) {
+              <tr class="hover:bg-slate-50">
+                <td class="px-5 py-4 text-slate-500">{{ producto.id }}</td>
+                <td class="px-5 py-4">
+                  <p class="font-semibold text-slate-900">{{ producto.nombre }}</p>
+                  <p class="mt-1 max-w-xs truncate text-xs text-slate-500">
+                    {{ producto.descripcion }}
+                  </p>
+                </td>
+                <td class="px-5 py-4 text-slate-600">
+                  {{ nombreCategoria(producto.categoria) }}
+                </td>
+                <td class="px-5 py-4 font-semibold text-slate-900">
+                  {{ formatoPrecio(producto.precio) }}
+                </td>
+                <td class="px-5 py-4">
+                  @if (producto.destacado) {
+                    <span class="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold text-cyan-800">
+                      Destacado
+                    </span>
+                  } @else {
+                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
+                      Normal
+                    </span>
+                  }
+                </td>
+                <td class="px-5 py-4">
+                  <div class="flex gap-2">
+                    <button type="button"
+                      (click)="editarProducto(producto)"
+                      class="rounded-lg border border-cyan-200 px-3 py-2 font-semibold text-cyan-800 hover:bg-cyan-50">
+                      Editar
+                    </button>
+                    <button type="button"
+                      (click)="eliminarProducto(producto)"
+                      class="rounded-lg border border-red-200 px-3 py-2 font-semibold text-red-700 hover:bg-red-50">
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</div>

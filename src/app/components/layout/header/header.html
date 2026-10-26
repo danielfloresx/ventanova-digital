@@ -1,0 +1,87 @@
+<header class="relative z-30 flex h-16 items-center gap-3 bg-[#0B1220] px-4 text-white shadow-lg sm:px-6">
+
+  <!-- Botón para abrir el menú en móviles -->
+  <button
+    type="button"
+    class="rounded-lg p-2 text-white transition hover:bg-[#172554] lg:hidden"
+    aria-label="Abrir menú lateral"
+    (click)="menuToggle.emit()">
+    <span class="text-xl">☰</span>
+  </button>
+
+  <!-- Botón para ocultar o mostrar el menú en escritorio -->
+  <button
+    type="button"
+    class="hidden rounded-lg p-2 text-white transition hover:bg-[#172554] lg:block"
+    aria-label="Mostrar u ocultar menú lateral"
+    title="Mostrar u ocultar menú lateral"
+    (click)="sidebarToggle.emit()">
+    <span class="text-xl">☰</span>
+  </button>
+
+  <!-- Logotipo -->
+  <a routerLink="/inicio" class="shrink-0 text-lg font-bold tracking-wide">
+    VentaNova <span class="text-[#06B6D4]">Digital</span>
+  </a>
+
+  <!-- Navegación superior -->
+  <nav class="ml-auto hidden items-center gap-1 lg:flex">
+
+    <a routerLink="/inicio"
+       routerLinkActive="text-[#06B6D4]"
+       class="rounded-lg px-3 py-2 hover:bg-[#172554]">
+      Inicio
+    </a>
+
+    <!-- Menú desplegable del catálogo -->
+    <div class="group relative">
+      <a routerLink="/catalogo"
+         routerLinkActive="text-[#06B6D4]"
+         class="flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-[#172554]">
+        Catálogo <span>⌄</span>
+      </a>
+
+      <div class="invisible absolute left-0 top-full mt-1 w-72 rounded-xl bg-white p-2 text-slate-800 opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+        <a routerLink="/catalogo" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Todos los productos</a>
+        <a routerLink="/catalogo/notebooks" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Notebooks</a>
+        <a routerLink="/catalogo/impresoras-y-scanners" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Impresoras y Scanners</a>
+        <a routerLink="/catalogo/audio" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Audio</a>
+        <a routerLink="/catalogo/videojuegos-y-consolas" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Videojuegos y Consolas</a>
+        <a routerLink="/catalogo/fotografia-y-video" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Fotografía y Video</a>
+        <a routerLink="/catalogo/perifericos-y-otros-accesorios" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Periféricos y otros accesorios</a>
+        <a routerLink="/catalogo/componentes-de-computador" class="block rounded-lg px-3 py-2 hover:bg-cyan-50">Componentes de Computador</a>
+      </div>
+    </div>
+
+    <a routerLink="/tendencias"
+       routerLinkActive="text-[#06B6D4]"
+       class="rounded-lg px-3 py-2 hover:bg-[#172554]">
+      Tendencias
+    </a>
+
+    <a routerLink="/contacto"
+       routerLinkActive="text-[#06B6D4]"
+       class="rounded-lg px-3 py-2 hover:bg-[#172554]">
+      Contacto
+    </a>
+
+    <!-- Icono decorativo de usuario, sin inicio de sesión -->
+    <button
+      type="button"
+      aria-label="Usuario"
+      title="Usuario"
+      class="ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-slate-600 text-slate-200 transition hover:border-[#06B6D4] hover:bg-[#172554] hover:text-[#06B6D4]">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        class="h-6 w-6">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+      </svg>
+    </button>
+
+  </nav>
+</header>
